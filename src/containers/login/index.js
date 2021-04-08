@@ -3,6 +3,8 @@ import OpenLogin from "openlogin";
 import AccountInfo  from "../../components/AccountInfo";
 import  * as ethers from "ethers";
 import * as zksync from "zksync";
+import { toast, ToastContainer  } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import "./style.scss";
 
 const zksyncConnector = {
@@ -113,6 +115,7 @@ function Login() {
         token: "ETH",
         amount: ethers.utils.parseEther("0.05"),
       });
+      toast.success("Deposit transaction initiated succesfully");
       const depositReceipt = await deposit.awaitReceipt();
       console.log("Deposit result: ", depositReceipt)
       alert("Eth deposited to zkSync successfully");
@@ -133,17 +136,19 @@ function Login() {
 
       console.log("Sync wallet: ", syncWallet)
       const changePubkey = await syncWallet.setSigningKey({ feeToken: 'ETH', ethAuthType: 'ECDSA' });
+      toast.success("Wallet unlock transaction initiated succesfully");
+
       // Wait until the tx is committed
       let receipt = await changePubkey.awaitReceipt();
       console.log("Unlock account receipt: ", receipt)
-      alert("Wallet unlocked successfully")
+      toast.success("Wallet unlocked successfully")
     } else {
       console.log("Signing key already set: ", await syncWallet.getAccountId())
-      alert("Wallet already unlocked")
+      toast.error("Wallet already unlocked")
     }
    } catch (error) {
     console.log("Error while unlock", error)
-    alert("Unlock zkSync wallet failed, deposit some eth to zkSync for paying unlock fee");
+    toast.error("Unlock zkSync wallet failed, deposit some eth to zkSync for paying unlock fee");
    }
 
   }
@@ -155,14 +160,14 @@ function Login() {
         token: "ETH",
         amount: ethers.utils.parseEther("0.01"),
       });
-
+      toast.success("Withdrawal intiated successfully")
       let receipt = await withdraw.awaitReceipt();
       console.log("withdraw account receipt: ", receipt)  
-      alert("Eth withdrawn tx commited to zkSync with");
+      toast.success("Eth withdrawn tx commited to zkSync with");
 
     } catch (error) {
       console.log("Error while withdrawal", error)
-      alert("Eth withdrawal from zkSync failed");
+      toast.error("Eth withdrawal from zkSync failed");
 
     }
 
@@ -214,7 +219,7 @@ function Login() {
         {
           (openlogin && openlogin.privKey) ?
           <div>
-       
+             <ToastContainer/>
              <AccountInfo
               handleDepositEthToZkSync={handleDepositEthToZkSync}
               handleWithDrawEthFromZkSync={handleWithDrawEthFromZkSync}

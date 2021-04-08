@@ -4,7 +4,8 @@ import "./style.scss";
 import { utils } from "ethers";
 
 function AccountInfo({
-  handleLogout,walletInfo, 
+  handleLogout,
+  walletInfo, 
   handleDepositEthToZkSync, 
   handleWithDrawEthFromZkSync, 
   unlockZkSyncWallet, 
@@ -47,6 +48,9 @@ function AccountInfo({
                <span style={{margin: 20}}>{(walletInfo?.privateKey)}</span>
             </div>
 
+    
+        </div>
+        <div>
             <button onClick={handleDepositEthToZkSync}>
                 Deposit eth to zkSync
             </button>
@@ -62,8 +66,8 @@ function AccountInfo({
             <button onClick={refreshBalances}>
                 Refresh balances
             </button>
-          </div>
         </div>
+      </div>
   </div>
  )
 }
