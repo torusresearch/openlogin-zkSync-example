@@ -2,8 +2,14 @@ import React from "react";
 import { PageHeader, Button } from "antd";
 import "./style.scss";
 import { utils } from "ethers";
-import { wallet } from "zksync";
-function AccountInfo({handleLogout,walletInfo }) {
+
+function AccountInfo({
+  handleLogout,walletInfo, 
+  handleDepositEthToZkSync, 
+  handleWithDrawEthFromZkSync, 
+  unlockZkSyncWallet, 
+  refreshBalances 
+}) {
 
  return (
     <div>
@@ -25,16 +31,37 @@ function AccountInfo({handleLogout,walletInfo }) {
               ZkSync Wallet address: <i>{walletInfo?.zkSyncAddress }</i>
             </div>
             <div style={{margin:20}}>
-              Eth chain Balance: <i>{(walletInfo?.ethBal.toNumber()) || 0}</i>
+              Eth chain Balance: <i>{(walletInfo && utils.formatEther(walletInfo.ethBal))}</i>
             </div>
+           
             <div style={{margin:20}}>
-              ZkSync Committed Balance: <i>{(wallet?.zkSyncBal) || 0}</i>
+              ZkSync Committed Balance: <i>{(walletInfo && utils.formatEther(walletInfo.zkSyncBal))}</i>
+            </div>
+
+            <div style={{margin:20}}>
+              ZkSync Verified Balance: <i>{(walletInfo && utils.formatEther(walletInfo.zkSyncVerifiedBalance))}</i>
             </div>
             <hr/>
             <span>Private key:</span>
             <div style={{margin:20, maxWidth: 900, wordWrap: "break-word"}}>
                <span style={{margin: 20}}>{(walletInfo?.privateKey)}</span>
             </div>
+
+            <button onClick={handleDepositEthToZkSync}>
+                Deposit eth to zkSync
+            </button>
+
+            <button onClick={unlockZkSyncWallet}>
+                Unlock zkSync wallet
+            </button>
+
+            <button onClick={handleWithDrawEthFromZkSync}>
+                Withdraw eth from zkSync
+            </button>
+
+            <button onClick={refreshBalances}>
+                Refresh balances
+            </button>
           </div>
         </div>
   </div>
