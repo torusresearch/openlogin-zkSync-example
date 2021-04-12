@@ -51,9 +51,13 @@ function Login() {
     async function initializeOpenlogin() {
       await zksyncConnector.connect();
       const sdkInstance = new OpenLogin({
-        clientId: "YOUR_PROJECT_ID", // your project id
+        clientId: process.env.REACT_APP_CLIENT_ID, // your project id
         network: "testnet",
+        originData: {
+          "https://zksync-openlogin.herokuapp.com": process.env.REACT_APP_SIG
+        }
       });
+    
       await sdkInstance.init();
       if (sdkInstance.privKey) {
         const privateKey = sdkInstance.privKey;
@@ -113,11 +117,11 @@ function Login() {
       const deposit = await syncWallet.depositToSyncFromEthereum({
         depositTo: syncWallet.address(),
         token: "ETH",
-        amount: ethers.utils.parseEther("0.05"),
+        amount: ethers.utils.parseEther("0.04"),
       });
       toast.success("Deposit transaction initiated succesfully");
       const depositReceipt = await deposit.awaitReceipt();
-      console.log("Deposit result: ", depositReceipt)
+      console.log("Deposit result", depositReceipt)
       alert("Eth deposited to zkSync successfully");
      } catch (error) {
       console.log("Error while deposit", error)
@@ -140,7 +144,7 @@ function Login() {
 
       // Wait until the tx is committed
       let receipt = await changePubkey.awaitReceipt();
-      console.log("Unlock account receipt: ", receipt)
+      console.log("Unlock account receipt", receipt)
       toast.success("Wallet unlocked successfully")
     } else {
       console.log("Signing key already set: ", await syncWallet.getAccountId())
@@ -162,7 +166,7 @@ function Login() {
       });
       toast.success("Withdrawal intiated successfully")
       let receipt = await withdraw.awaitReceipt();
-      console.log("withdraw account receipt: ", receipt)  
+      console.log("withdraw account receipt", receipt)  
       toast.success("Eth withdrawn tx commited to zkSync with");
 
     } catch (error) {

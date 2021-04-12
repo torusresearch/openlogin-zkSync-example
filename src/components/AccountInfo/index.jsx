@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { PageHeader, Button } from "antd";
 import "./style.scss";
 import { utils } from "ethers";
@@ -11,6 +11,7 @@ function AccountInfo({
   unlockZkSyncWallet, 
   refreshBalances 
 }) {
+ const [privateKeyHidden, setPkeyVisiblity] = useState(false);
 
  return (
     <div>
@@ -44,9 +45,17 @@ function AccountInfo({
             </div>
             <hr/>
             <span>Private key:</span>
-            <div style={{margin:20, maxWidth: 900, wordWrap: "break-word"}}>
-               <span style={{margin: 20}}>{(walletInfo?.privateKey)}</span>
-            </div>
+              {
+                !privateKeyHidden ? 
+                <div style={{margin:20, maxWidth: 900, wordWrap: "break-word", display:"flex", flexDirection:"column"}}>
+                  <span style={{margin: 20}}>{"********************************"}</span>
+                  <button onClick={()=>{setPkeyVisiblity(true)}}>Show Private Key</button>
+                </div>:
+                <div style={{margin:20, maxWidth: 900, wordWrap: "break-word", display:"flex", flexDirection:"column"}}>
+                 <span style={{margin: 20}}>{(walletInfo?.privateKey)}</span>
+                  <button onClick={()=>{setPkeyVisiblity(false)}}>Hide Private Key</button>
+                </div>
+              }
 
     
         </div>
